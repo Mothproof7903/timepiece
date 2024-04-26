@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>定时器</title>
+  <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.js"></script>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+      background-color: #f2f2f2;
+    }
+    
+    #app {
+      text-align: center;
+      background-color: #fff;
+      border-radius: 10px;
+      box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.1);
+      padding: 30px;
+    }
+    
+    h1 {
+      color: #333;
+    }
+    
+    .timer, .stopwatch {
+      font-size: 2rem;
+      margin-bottom: 20px;
+      background: linear-gradient(to right, #007bff, #0099ff);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    
+    button {
+      margin: 0 10px;
+      padding: 10px 20px;
+      font-size: 1rem;
+      background-color: #007bff;
+      color: #fff;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+    
+    button:hover {
+      background-color: #0056b3;
+    }
+  </style>
+</head>
+<body>
+
+<div id="app">
+  <h1>定时器</h1>
+  <div class="timer">{{ formatTime(timer) }}</div>
+  <button @click="startTimer" v-if="!timerIsRunning">开始定时器</button>
+  <button @click="stopTimer" v-else>停止定时器</button>
+  <button @click="resetTimer">重置定时器</button>
+</div>
+
+<script>
+new Vue({
+  el: '#app',
+  data: {
+    timerIsRunning: false,
+    timer: 600, // 初始定时器设置为10分钟（600秒）
+  },
+  computed: {
+    formatTime() {
+      return function(time) {
+        const minutes = Math.floor(time / 60);
+        const seconds = time % 60;
+        return `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+      };
+    }
+  },
+  methods: {
+    startTimer() {
+      this.timerIsRunning = true;
+      this.timerInterval = setInterval(() => {
+        if (this.timer > 0) {
+          this.timer--;
+        } else {
+          this.stopTimer();
+        }
+      }, 1000);
+    },
+    stopTimer() {
+      this.timerIsRunning = false;
+      clearInterval(this.timerInterval);
+    },
+    resetTimer() {
+      this.timer = 600; // 重置定时器为10分钟
+    }
+  }
+});
+</script>
+
+</body>
+</html>
